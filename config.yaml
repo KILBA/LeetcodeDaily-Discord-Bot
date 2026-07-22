@@ -3,4 +3,4 @@ messageTime:
     minutes: 30
 # days to not send message, capitilization is ignored but spelling is not
 blacklistedDays: ['Saturday', 'Sunday']
-channelName: ['bots']
+channelName: 'bot-testing'

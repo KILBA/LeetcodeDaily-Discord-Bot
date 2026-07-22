@@ -83,7 +83,7 @@ async def on_message(message):
 
 async def sendQuestions():
     try:
-        response = requests.get(url+"daily",timeout=5)
+        response = requests.get(url+"random",timeout=5)
         response.raise_for_status()
         data = response.json()
         id = data["frontend_id"]
