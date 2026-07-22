@@ -42,6 +42,7 @@ async def on_message(message):
             difficulty = data["difficulty"]
             leetcode_url = data["url"]
             leetcode_message = (
+                "https://klipy.com/gifs/jojo-kira-yoshikage-1"
                 "*straightens tie with one precise motion, sits perfectly still*\n"
                 f"**LeetCode Problem #{id} - {title}**\n"
                 f"**Difficulty:** {difficulty}\n"
