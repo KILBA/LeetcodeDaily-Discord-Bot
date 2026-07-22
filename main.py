@@ -15,7 +15,7 @@ load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 
 # API URL
-url = "https://leetcode-api-pied.vercel.app/"
+url = "https://leetcode-api-pied.vercel.app"
 
 with open('config.yaml', 'r') as file:
     configFile = yaml.safe_load(file)
@@ -50,7 +50,7 @@ async def on_message(message):
     # !random command
     if message.content == "!random":
         try:
-            response = requests.get(url+"random", timeout=5)
+            response = requests.get(url+"/random", timeout=5)
             response.raise_for_status()
 
             data = response.json()
@@ -83,10 +83,13 @@ async def on_message(message):
 
 async def sendQuestions():
     try:
-        response = requests.get(url+"random",timeout=5)
+        response = requests.get(url+"/daily",timeout=5)
         response.raise_for_status()
-        data = response.json()
-        id = data["frontend_id"]
+        daily = response.json()
+        leetcode_daily = requests.get(url+daily["link"],timeout=5)
+        leetcode_daily.raise_for_status()
+        data = leetcode_daily.json()
+        id = data["questionId"]
         title = data["title"]
         difficulty = data["difficulty"]
         leetcode_url = data["url"]
