@@ -30,11 +30,15 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 client = discord.Client(intents=intents)
-mainChannel = discord.utils.get(client.get_all_channels(), name=channelName)
+mainChannel = None
 
 @client.event
 async def on_ready():
     print(f"We have logged in as {client.user}")
+    global mainChannel
+    if not messageDaily.is_running():
+        mainChannel = discord.utils.get(client.get_all_channels(), name=channelName)
+        messageDaily.start()
 
 
 @client.event
@@ -102,10 +106,10 @@ async def sendQuestions():
             "> \"Those who fail to submit on time will simply confirm my expectations. Those who succeed may continue living their ordinary lives for another day.\"\n\n"
             "*smooths his tie one final time before pressing Enter with immaculate precision.*"
         )
-        await channelName.send(kira_message)
+        await mainChannel.send(kira_message)
     except requests.exceptions.RequestException as e:
         print(f"API Request failed: {e}")
-        await channelName.send("❌ Failed to fetch a random LeetCode problem.")
+        await mainChannel.send("❌ Failed to fetch a random LeetCode problem.")
 
 
 @discordTasks.loop(minutes=1.0)
@@ -113,7 +117,7 @@ async def messageDaily():
     global blacklistedDays
     if dt.now().strftime('%A'). lower() in blacklistedDays:
         return
-    if (dt.now().hour == hour) and (dt.now().strftime('%M') == str(minutes)):
+    if (dt.now().hour == hour) and (dt.now().minute == minutes):
         await sendQuestions()
 
 client.run(TOKEN)
